@@ -47,27 +47,27 @@ internal class Scanner(string source, IReporter reporter)
         var c = Advance();
         switch (c)
         {
-            case '(': return AddToken(TokenType.LEFT_PAREN);
-            case ')': return AddToken(TokenType.RIGHT_PAREN);
-            case '{': return AddToken(TokenType.LEFT_BRACE);
-            case '}': return AddToken(TokenType.RIGHT_BRACE);
-            case ',': return AddToken(TokenType.COMMA);
-            case '.': return AddToken(TokenType.DOT);
-            case '-': return AddToken(TokenType.MINUS);
-            case '+': return AddToken(TokenType.PLUS);
-            case '*': return AddToken(TokenType.STAR);
-            case ';': return AddToken(TokenType.SEMICOLON);
-            case '!': return AddToken(Match('=') ? TokenType.BANG_EQUAL : TokenType.BANG);
-            case '=': return AddToken(Match('=') ? TokenType.EQUAL_EQUAL: TokenType.EQUAL);
-            case '>': return AddToken(Match('=') ? TokenType.GREATER_EQUAL: TokenType.GREATER);
-            case '<': return AddToken(Match('=') ? TokenType.LESS_EQUAL : TokenType.LESS);
+            case '(': return CreateToken(TokenType.LEFT_PAREN);
+            case ')': return CreateToken(TokenType.RIGHT_PAREN);
+            case '{': return CreateToken(TokenType.LEFT_BRACE);
+            case '}': return CreateToken(TokenType.RIGHT_BRACE);
+            case ',': return CreateToken(TokenType.COMMA);
+            case '.': return CreateToken(TokenType.DOT);
+            case '-': return CreateToken(TokenType.MINUS);
+            case '+': return CreateToken(TokenType.PLUS);
+            case '*': return CreateToken(TokenType.STAR);
+            case ';': return CreateToken(TokenType.SEMICOLON);
+            case '!': return CreateToken(Match('=') ? TokenType.BANG_EQUAL : TokenType.BANG);
+            case '=': return CreateToken(Match('=') ? TokenType.EQUAL_EQUAL: TokenType.EQUAL);
+            case '>': return CreateToken(Match('=') ? TokenType.GREATER_EQUAL: TokenType.GREATER);
+            case '<': return CreateToken(Match('=') ? TokenType.LESS_EQUAL : TokenType.LESS);
             case '/':
                 if (Match('/'))
                 {
                     while (Peek() != '\n' && !IsAtEnd) Advance();
                 } 
                 else if (Match('*')) BlockComment();
-                else return AddToken(TokenType.SLASH);
+                else return CreateToken(TokenType.SLASH);
                 break;
             case '"': return String();
             case ' ':
@@ -91,7 +91,7 @@ internal class Scanner(string source, IReporter reporter)
         reporter.Error(line, col, message);
     }
 
-    private Token AddToken(TokenType type, object? literal = null)
+    private Token CreateToken(TokenType type, object? literal = null)
     {
         var text = source[_start.._current];
         return new Token(type, text, literal, _start);
@@ -110,7 +110,7 @@ internal class Scanner(string source, IReporter reporter)
         Advance();
 
         var value = source[(_start + 1)..(_current - 1)];
-        return AddToken(TokenType.STRING, value);
+        return CreateToken(TokenType.STRING, value);
     }
 
     private Token Number()
@@ -118,19 +118,19 @@ internal class Scanner(string source, IReporter reporter)
         while (Peek().IsDigit()) Advance();
 
         if (Peek() != '.' || !PeekNext().IsDigit())
-            return AddToken(TokenType.NUMBER, double.Parse(source[_start.._current]));
+            return CreateToken(TokenType.NUMBER, double.Parse(source[_start.._current]));
 
         Advance();
         while (Peek().IsDigit()) Advance();
 
-        return AddToken(TokenType.NUMBER, double.Parse(source[_start.._current]));
+        return CreateToken(TokenType.NUMBER, double.Parse(source[_start.._current]));
     }
 
     private Token Identifier()
     {
         while (Peek().IsAlphaNumeric()) Advance();
         var text = source[_start.._current];
-        return AddToken(Keywords.TryGetValue(text, out var token) ? token : TokenType.IDENTIFIER);
+        return CreateToken(Keywords.TryGetValue(text, out var token) ? token : TokenType.IDENTIFIER);
     }
 
     private void BlockComment()
