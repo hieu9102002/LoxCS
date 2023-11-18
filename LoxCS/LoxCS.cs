@@ -2,7 +2,7 @@
 
 class LoxCS
 {
-    private static readonly IReporter Reporter = new ConsoleReporter();
+    private static readonly ConsoleReporter Reporter = new ();
 
     public static int Main(string[] args)
     {
@@ -17,7 +17,7 @@ class LoxCS
                 RunREPL();
                 break;
         }
-
+        
         return 0;
     }
 

@@ -10,3 +10,9 @@ Chapter 4:
 2. No code
 3. No code
 4. C-style comment block - Done.
+
+Chapter 5:
+
+1. No code
+2. No code
+3. RPN Visitor - Done

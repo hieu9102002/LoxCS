@@ -1,6 +1,6 @@
 ﻿namespace LoxCS;
 
-internal interface IReporter
+public interface IReporter
 {
     public bool HadError { get; }
     public void Error(int line, int column, string message);

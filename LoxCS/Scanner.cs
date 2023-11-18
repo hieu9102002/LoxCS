@@ -1,7 +1,7 @@
 ﻿namespace LoxCS;
-internal class Scanner(string source, IReporter reporter)
+public class Scanner(string source, IReporter reporter)
 {
-    private static readonly IReadOnlyDictionary<string, TokenType> Keywords = new Dictionary<string, TokenType>
+    private static readonly Dictionary<string, TokenType> Keywords = new()
     {
         {"and", TokenType.AND},
         {"class", TokenType.CLASS},

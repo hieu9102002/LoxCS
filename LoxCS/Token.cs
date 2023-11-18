@@ -1,6 +1,6 @@
 ﻿namespace LoxCS;
-internal class Token(TokenType type, string lexeme, object? literal, int offset)
+public record Token(TokenType Type, string Lexeme, object? Literal, int Offset)
 {
     public override string ToString()
-        => $"{type} {lexeme} {literal}";
+        => $"{Type} {Lexeme} {Literal}";
 }
