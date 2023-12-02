@@ -165,7 +165,7 @@ public class Scanner(string source, IReporter reporter)
 
 public static class SourceExtensions
 {
-    public static (int, int) GetLineAndColumnFromOffset(this string source, int offset)
+    public static (int line, int column) GetLineAndColumnFromOffset(this string source, int offset)
     {
         var lines = source[..(offset + 1)].Split('\n');
         return (lines.Length, lines.Last().Length);

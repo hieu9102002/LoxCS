@@ -2,7 +2,7 @@
 
 class LoxCS
 {
-    private static readonly ConsoleReporter Reporter = new ();
+    private static readonly ConsoleReporter Reporter = new();
 
     public static int Main(string[] args)
     {
@@ -44,11 +44,12 @@ class LoxCS
     private static void Run(string source)
     {
         var scanner = new Scanner(source, Reporter);
+        Reporter.SourceCode = source;
         var tokens = scanner.ScanTokens();
-        
-        foreach (var token in tokens)
-        {
-            Console.WriteLine(token);
-        }
+        using var parser = new Parser(tokens, Reporter);
+        var expression = parser.Parse();
+
+        if (Reporter.HadError || expression is null) return;
+        Console.WriteLine(new AstPrinter().Print(expression));
     }
 }
